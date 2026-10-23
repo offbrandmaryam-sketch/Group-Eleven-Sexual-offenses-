@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boundaries in Action - Clinical Presentation Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a1317;
+            --card-bg: #122228;
+            --clinic-teal: #00c9a7;
+            --clinic-blue: #4da8da;
+            --clinic-accent: #20b2aa;
+            --alert-yellow: #f8c21a;
+            --text-light: #f0f7f9;
+            --text-muted: #8ca3ad;
+            --border-teal: #1e4d58;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 920px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-teal);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 201, 167, 0.15);
+            padding: 32px;
+            position: relative;
+        }
+
+        /* Top Header Navigation */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-teal);
+        }
+
+        .badge-mode {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            color: var(--clinic-teal);
+            border: 1px solid var(--clinic-teal);
+            padding: 6px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+        }
+
+        .helpline-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            background: #d9534f;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .helpline-btn:hover {
+            background: #ff6b6b;
+        }
+
+        /* Title Area */
+        .header-title {
+            font-family: 'Press Start 2P', monospace;
+            color: var(--clinic-teal);
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 28px;
+        }
+
+        /* Metrics HUD Dashboard (First Format Style) */
+        .hud-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .hud-card {
+            background: #0a1317;
+            border: 1px solid var(--border-teal);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .hud-label {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            color: var(--clinic-blue);
+            margin-bottom: 6px;
+        }
+
+        .hud-value {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.1rem;
+            color: var(--alert-yellow);
+        }
+
+        /* Main Game Content Frame with Doctor Character */
+        .content-card {
+            background: #081014;
+            border: 1px solid var(--border-teal);
+            border-radius: 12px;
+            padding: 28px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .character-dialogue-wrapper {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        /* Pixel Doctor Sprite Graphic Container */
+        .pixel-doctor {
+            width: 96px;
+            height: 96px;
+            min-width: 96px;
+            background: #172d35;
+            border: 2px solid var(--clinic-teal);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            image-rendering: pixelated;
+        }
+
+        .doctor-speech-bubble {
+            flex-grow: 1;
+            background: #102127;
+            border: 1px solid var(--clinic-blue);
+            border-radius: 10px;
+            padding: 18px 22px;
+            position: relative;
+        }
+
+        .scene-header {
+            font-family: 'Press Start 2P', monospace;
+            color: var(--clinic-teal);
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+        }
+
+        .scene-body {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        /* Presentation Decision Option Buttons (First Format Style) */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option-btn {
+            background: #122228;
+            border: 1px solid var(--clinic-blue);
+            color: var(--text-light);
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .option-btn:hover {
+            background: var(--clinic-blue);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(77, 168, 218, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .option-key {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            background: #081014;
+            color: var(--clinic-teal);
+            border: 1px solid var(--clinic-teal);
+            padding: 6px 10px;
+            border-radius: 6px;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        /* Educational Analysis Takeaway Box (First Format Style) */
+        .takeaway-box {
+            background: #102127;
+            border: 1px solid var(--alert-yellow);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .takeaway-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            color: var(--alert-yellow);
+            margin-bottom: 10px;
+        }
+
+        .primary-action-btn {
+            background: var(--clinic-teal);
+            color: #000;
+            border: none;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            padding: 16px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .primary-action-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .results-wrapper {
+            text-align: center;
+        }
+
+        .results-title {
+            font-family: 'Press Start 2P', monospace;
+            color: var(--clinic-teal);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .results-summary {
+            background: #102127;
+            border: 1px solid var(--clinic-teal);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: left;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <!-- Top Control Bar -->
+        <div class="top-bar">
+            <span class="badge-mode">CLINICAL PRESENTATION MODE</span>
+            <a href="https://www.rainn.org/" target="_blank" class="helpline-btn">EMERGENCY HELPLINE</a>
+        </div>
+
+        <h1 class="header-title">BOUNDARIES IN ACTION</h1>
+        <p class="header-subtitle">Interactive Health & Safety Awareness Case Studies</p>
+
+        <!-- Metrics Dashboard -->
+        <div class="hud-row">
+            <div class="hud-card">
+                <div class="hud-label">CASE STUDY</div>
+                <div class="hud-value" id="hud-stage">1 / 3</div>
+            </div>
+            <div class="hud-card">
+                <div class="hud-label">AWARENESS SCORE</div>
+                <div class="hud-value" id="hud-score">0</div>
+            </div>
+            <div class="hud-card">
+                <div class="hud-label">TARGET</div>
+                <div class="hud-value">300</div>
+            </div>
+        </div>
+
+        <!-- Main Display Container -->
+        <div class="content-card" id="main-content">
+            <!-- Dynamic Content Injected Here -->
+        </div>
+    </div>
+
+    <script>
+        const scenarios = [
+            {
+                title: "CASE STUDY 1: SOCIAL CONSENT & BOUNDARIES",
+                doctorNote: "Hello, I'm Dr. Pixel. Let's review our first case study on interpersonal boundaries in social settings.",
+                text: "At a campus event, Sam offers Alex another drink. Alex hesitates, checks their phone, and says, 'I guess I could, but I really should get going soon.' What is the appropriate clinical/interpersonal response?",
+                choices: [
+                    {
+                        text: "Acknowledge the hesitation and offer a non-alcoholic drink or support their desire to leave.",
+                        score: 100,
+                        takeaway: "Active consent requires enthusiastic, unpressured agreement. Non-verbal hesitation indicates uncertainty—always respect boundaries immediately."
+                    },
+                    {
+                        text: "Pour the drink anyway and persuade them with, 'Come on, just stay for one more!'",
+                        score: 0,
+                        takeaway: "Pushing past hesitation or using peer pressure invalidates consent and disregards individual boundaries."
+                    },
+                    {
+                        text: "Insist they stay and take away their phone so they stop checking the time.",
+                        score: -50,
+                        takeaway: "Restricting personal property or movement crosses directly into controlling and coercive behavior."
+                    }
+                ]
+            },
+            {
+                title: "CASE STUDY 2: BYSTANDER INTERVENTION (5 Ds)",
+                doctorNote: "Case Study 2: Examining effective bystander intervention techniques in public spaces.",
+                text: "In a busy hallway, you observe a student cornered by an individual persistently demanding personal contact information while the student looks visibly distressed. What intervention strategy is best?",
+                choices: [
+                    {
+                        text: "DISTRACT: Approach and interrupt safely by asking, 'Hey, the advisor is waiting for you in room 202!'",
+                        score: 100,
+                        takeaway: "Distraction creates an immediate, safe exit pathway for someone in a vulnerable position without escalating conflict."
+                    },
+                    {
+                        text: "IGNORE: Mind your own business since neither person explicitly asked for help.",
+                        score: 0,
+                        takeaway: "Bystander apathy allows unsafe situations to escalate. Applying the 5 Ds creates a protective community standard."
+                    },
+                    {
+                        text: "RECORD: Silently film the interaction from a distance without offering support.",
+                        score: 25,
+                        takeaway: "Documentation can be helpful, but direct intervention or delegating help should always take priority."
+                    }
+                ]
+            },
+            {
+                title: "CASE STUDY 3: DIGITAL BOUNDARIES & SAFETY",
+                doctorNote: "Case Study 3: Evaluating digital safety, privacy rights, and online harassment.",
+                text: "A project partner sends unsolicited private messages asking for personal photos after being requested to keep communications strictly professional. What is the recommended course of action?",
+                choices: [
+                    {
+                        text: "State the boundary clearly once, document the messages, and report through official channels.",
+                        score: 100,
+                        takeaway: "Digital harassment violates personal boundaries. Documenting evidence and utilizing official channels ensures accountability."
+                    },
+                    {
+                        text: "Comply and send a photo to prevent tension within the group project.",
+                        score: 0,
+                        takeaway: "Compliance under coercion or pressure does not constitute genuine consent. Boundaries must always be respected."
+                    },
+                    {
+                        text: "Post screenshots in a public group chat to embarrass the individual.",
+                        score: 20,
+                        takeaway: "Public exposure can cause escalation or retaliation. Using formal reporting channels is safer and more effective."
+                    }
+                ]
+            }
+        ];
+
+        // Pixel SVG Doctor Graphic Data
+        const doctorSVG = `
+            <svg width="64" height="64" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Hair -->
+                <rect x="5" y="1" width="6" height="2" fill="#2c1e21"/>
+                <rect x="4" y="2" width="8" height="2" fill="#2c1e21"/>
+                <!-- Face -->
+                <rect x="4" y="4" width="8" height="4" fill="#f3a97b"/>
+                <!-- Eyes -->
+                <rect x="5" y="5" width="2" height="1" fill="#1b1213"/>
+                <rect x="9" y="5" width="2" height="1" fill="#1b1213"/>
+                <!-- Doctor Coat -->
+                <rect x="3" y="8" width="10" height="7" fill="#ffffff"/>
+                <!-- Stethoscope & Scrubs -->
+                <rect x="7" y="8" width="2" height="5" fill="#00c9a7"/>
+                <rect x="5" y="9" width="1" height="3" fill="#4da8da"/>
+                <rect x="10" y="9" width="1" height="3" fill="#4da8da"/>
+                <!-- Headband / Reflector -->
+                <rect x="7" y="2" width="2" height="1" fill="#e0e0e0"/>
+            </svg>
+        `;
+
+        let currentStage = 0;
+        let totalScore = 0;
+
+        function renderStage() {
+            const container = document.getElementById("main-content");
+            document.getElementById("hud-stage").innerText = `${currentStage + 1} / ${scenarios.length}`;
+            document.getElementById("hud-score").innerText = totalScore;
+
+            const stage = scenarios[currentStage];
+
+            let html = `
+                <div class="character-dialogue-wrapper">
+                    <div class="pixel-doctor">
+                        ${doctorSVG}
+                    </div>
+                    <div class="doctor-speech-bubble">
+                        <div class="scene-header">${stage.title}</div>
+                        <div style="color: var(--clinic-teal); font-size: 0.95rem; margin-bottom: 8px;"><strong>Dr. Pixel:</strong> "${stage.doctorNote}"</div>
+                        <div class="scene-body">${stage.text}</div>
+                    </div>
+                </div>
+                <div class="options-list">
+            `;
+
+            stage.choices.forEach((choice, index) => {
+                const keyLabel = String.fromCharCode(65 + index); // A, B, C
+                html += `
+                    <button class="option-btn" onclick="selectChoice(${index})">
+                        <span class="option-key">${keyLabel}</span>
+                        <span>${choice.text}</span>
+                    </button>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function selectChoice(index) {
+            const stage = scenarios[currentStage];
+            const choice = stage.choices[index];
+            totalScore += choice.score;
+            document.getElementById("hud-score").innerText = totalScore;
+
+            const container = document.getElementById("main-content");
+            container.innerHTML = `
+                <div class="character-dialogue-wrapper">
+                    <div class="pixel-doctor">
+                        ${doctorSVG}
+                    </div>
+                    <div class="doctor-speech-bubble">
+                        <div class="scene-header">CLINICAL ANALYSIS & DEBRIEF</div>
+                        <div class="takeaway-box">
+                            <div class="takeaway-title">EDUCATIONAL TAKEAWAY:</div>
+                            ${choice.takeaway}
+                        </div>
+                    </div>
+                </div>
+                <button class="primary-action-btn" onclick="nextStage()">
+                    ${currentStage < scenarios.length - 1 ? 'PROCEED TO NEXT CASE STUDY ▶' : 'VIEW CLINICAL SUMMARY ▶'}
+                </button>
+            `;
+        }
+
+        function nextStage() {
+            currentStage++;
+            if (currentStage < scenarios.length) {
+                renderStage();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("hud-stage").innerText = "COMPLETE";
+            const container = document.getElementById("main-content");
+
+            container.innerHTML = `
+                <div class="results-wrapper">
+                    <div class="results-title">CLINICAL PRESENTATION COMPLETE</div>
+                    <div class="scene-body">FINAL AWARENESS SCORE: <strong style="color:var(--alert-yellow);">${totalScore} / 300</strong></div>
+                    <div class="results-summary">
+                        <div class="takeaway-title">CORE PRESENTATION LESSONS:</div>
+                        <ul style="margin-left: 20px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <li>Active consent requires ongoing, unpressured verbal and non-verbal alignment.</li>
+                            <li>Bystander intervention techniques empower individuals to de-escalate situations safely.</li>
+                            <li>Digital spaces require strict adherence to privacy and personal boundaries.</li>
+                        </ul>
+                    </div>
+                    <button class="primary-action-btn" onclick="restartGame()">RESTART PRESENTATION</button>
+                </div>
+            `;
+        }
+
+        function restartGame() {
+            currentStage = 0;
+            totalScore = 0;
+            renderStage();
+        }
+
+        // Initialize on page load
+        renderStage();
+    </script>
+</body>
+</html>
